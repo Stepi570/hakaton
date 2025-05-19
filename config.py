@@ -1,4 +1,4 @@
-host = "bd-step15.db-msk0.amvera.tech"
+host = "localhost"
 user = "step"
-password = "05010501"
-db_name = "hakaton"
+password = "0501Valeev"
+db_name = "mybazadannah"

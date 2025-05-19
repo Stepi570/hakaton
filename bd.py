@@ -1,5 +1,6 @@
 import psycopg2
 from config import db_name,host,password,user
+import string
 import random
 def sql(text):
     try:
@@ -25,8 +26,7 @@ def sql(text):
                 return cursor.rowcount  # Для INSERT/UPDATE/DELETE
             
     except Exception as e:
-        print(f"Ошибка: {e}")
-        return None
+        return (f"Ошибка: {e}")
     finally:
         if connection:
             connection.close()
@@ -44,8 +44,11 @@ def chek_pasport(pasport):
         return True
 
 def chek_name(name):
-    h=f"SELECT * FROM users WHERE us='{name}'"
-    return sql(h)
+    h=f"SELECT * FROM users WHERE username='{name}'"
+    if sql(h) == []:
+        return True
+    else:
+        return False
 
 def new_human(username ,password ,name ,surname ,patronymic ,pasport ,date):
     part1 = f"{random.randint(10, 99):02d}"
@@ -54,7 +57,42 @@ def new_human(username ,password ,name ,surname ,patronymic ,pasport ,date):
     return sql(h)
 
 def new():
-    h="CREATE TABLE users (username VARCHAR(250)  NOT NULL,password VARCHAR(255) NOT NULL,name VARCHAR(255),surname VARCHAR(255),patronymic VARCHAR(255),pasport VARCHAR(20),date VARCHAR(30), balance BIGINT,card_number BIGINT,expiration_date VARCHAR(30),CVV SMALLINT);"
+    h="CREATE TABLE users (username VARCHAR(250)  NOT NULL,password VARCHAR(255) NOT NULL,name VARCHAR(255),surname VARCHAR(255),patronymic VARCHAR(255),pasport VARCHAR(20),date VARCHAR(30), balance BIGINT,card_number BIGINT,expiration_date VARCHAR(30),CVV SMALLINT);CREATE TABLE transaction (chek VARCHAR(255),sender BIGINT, recipient BIGINT,sum BIGINT);"
     return sql(h)
 
-def clasic_transaktion():
+def clasic_transaktion(card_sender,card_recipient,summ):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choice(characters) for _ in range(50))
+    h = f"""
+    DO $$
+    DECLARE
+        rows_affected1 INTEGER;
+        rows_affected2 INTEGER;
+    BEGIN     
+        -- Проверяем достаточность средств
+        PERFORM 1 FROM users WHERE card_number = {card_sender} AND balance >= 500;
+        IF NOT FOUND THEN
+            RAISE EXCEPTION 'Недостаточно средств на карте';
+        END IF;
+        
+        -- Выполняем транзакцию
+        UPDATE users SET balance = balance + {summ} WHERE card_number = {card_recipient};
+        GET DIAGNOSTICS rows_affected1 = ROW_COUNT;
+        
+        UPDATE users SET balance = balance - {summ} WHERE card_number = {card_sender};
+        GET DIAGNOSTICS rows_affected2 = ROW_COUNT;
+        
+        IF rows_affected1 = 0 OR rows_affected2 = 0 THEN
+            RAISE EXCEPTION 'Ошибка при обновлении баланса';
+        END IF;
+        INSERT INTO transaction (chek ,sender, recipient,sum ) VALUES ('{random_string}',{card_sender},{card_recipient},{summ});
+        RAISE NOTICE 'Транзакция успешно выполнена';
+    EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION '%', SQLERRM;
+    END;
+    $$ LANGUAGE plpgsql;
+    """
+    return sql(h)
+    h=f"INSERT INTO transaction (chek ,sender, recipient,sum ) VALUES ('{random_string}',{card_sender},{card_recipient},{sum})"
+
