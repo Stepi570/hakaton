@@ -1,6 +1,6 @@
 import psycopg2
 from config import db_name,host,password,user
-
+import random
 def sql(text):
     try:
         connection = psycopg2.connect(
@@ -33,21 +33,28 @@ def sql(text):
             print("Соединение закрыто")
 
 def chek_human(user,password):
-    h=f"SELECT * FROM users WHERE us='{user}' AND password='{password}'"
+    h=f"SELECT * FROM users WHERE username='{user}' AND password='{password}'"
     return sql(h)
 
-def chek_pasport(email):
-    h=f"SELECT * FROM users WHERE email='{email}'"
-    return sql(h)
+def chek_pasport(pasport):
+    h=f"SELECT * FROM users WHERE pasport='{pasport}'"
+    if sql(h) == []:
+        return False
+    else:
+        return True
 
 def chek_name(name):
     h=f"SELECT * FROM users WHERE us='{name}'"
     return sql(h)
 
-def new_human(username ,password ,name ,surname ,patronymic ,pasport ,date , balance):
-    h=f"INSERT INTO users (username ,password ,name ,surname ,patronymic ,pasport ,date , balance ) VALUES ('{username}' ,'{password}' ,'{name}' ,'{surname}' ,'{patronymic}' ,'{pasport}' ,'{date}' , {balance})"
+def new_human(username ,password ,name ,surname ,patronymic ,pasport ,date):
+    part1 = f"{random.randint(10, 99):02d}"
+    part2 = f"{random.randint(10, 99):02d}"
+    h=f"INSERT INTO users (username ,password ,name ,surname ,patronymic ,pasport ,date , balance ,card_number,expiration_date ,CVV) VALUES ('{username}' ,'{password}' ,'{name}' ,'{surname}' ,'{patronymic}' ,'{pasport}' ,'{date}' , 0,{random.randint(10**15, 10**16 - 1)},'{f"{part1}/{part2}"}',{random.randint(100, 999):02d})"
     return sql(h)
 
 def new():
-    h="CREATE TABLE users (username VARCHAR(250)  NOT NULL,password VARCHAR(255) NOT NULL,name VARCHAR(255),surname VARCHAR(255),patronymic VARCHAR(255),pasport VARCHAR(20),date VARCHAR(30), balance BIGINT);"
+    h="CREATE TABLE users (username VARCHAR(250)  NOT NULL,password VARCHAR(255) NOT NULL,name VARCHAR(255),surname VARCHAR(255),patronymic VARCHAR(255),pasport VARCHAR(20),date VARCHAR(30), balance BIGINT,card_number BIGINT,expiration_date VARCHAR(30),CVV SMALLINT);"
     return sql(h)
+
+def clasic_transaktion():
