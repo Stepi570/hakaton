@@ -36,7 +36,7 @@ def chek_human(user,password):
     h=f"SELECT * FROM users WHERE us='{user}' AND password='{password}'"
     return sql(h)
 
-def chek_email(email):
+def chek_pasport(email):
     h=f"SELECT * FROM users WHERE email='{email}'"
     return sql(h)
 
@@ -44,10 +44,10 @@ def chek_name(name):
     h=f"SELECT * FROM users WHERE us='{name}'"
     return sql(h)
 
-def new_human(user,pas,email):
-    h=f"INSERT INTO users (us,password,email) VALUES ('{user}','{pas}','{email}')"
+def new_human(username ,password ,name ,surname ,patronymic ,pasport ,date , balance):
+    h=f"INSERT INTO users (username ,password ,name ,surname ,patronymic ,pasport ,date , balance ) VALUES ('{username}' ,'{password}' ,'{name}' ,'{surname}' ,'{patronymic}' ,'{pasport}' ,'{date}' , {balance})"
     return sql(h)
 
 def new():
-    h="CREATE TABLE users (us VARCHAR(50)  NOT NULL,password VARCHAR(255) NOT NULL,email VARCHAR(255));"
+    h="CREATE TABLE users (username VARCHAR(250)  NOT NULL,password VARCHAR(255) NOT NULL,name VARCHAR(255),surname VARCHAR(255),patronymic VARCHAR(255),pasport VARCHAR(20),date VARCHAR(30), balance BIGINT);"
     return sql(h)
