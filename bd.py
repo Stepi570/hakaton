@@ -49,7 +49,5 @@ def new_human(user,pas,email):
     return sql(h)
 
 def new():
-    h="DROP TABLE users;"
-    sql(h)
     h="CREATE TABLE users (us VARCHAR(50)  NOT NULL,password VARCHAR(255) NOT NULL,email VARCHAR(255));"
     return sql(h)
