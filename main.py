@@ -21,7 +21,7 @@ def start():
     return render_template('vibor.html')
 
 if __name__=="__main__":
-    print(clasic_transaktion(4111111111111111,7890123456789012, 500))
     new()
+    print(clasic_transaktion(4111111111111111,7890123456789012, 500))
     app.run(debug=True)
     

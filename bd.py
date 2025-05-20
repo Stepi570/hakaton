@@ -1,6 +1,7 @@
 import psycopg2
 from config import db_name,host,password,user
 import string
+from datetime import datetime
 import random
 def sql(text):
     try:
@@ -57,12 +58,14 @@ def new_human(username ,password ,name ,surname ,patronymic ,pasport ,date):
     return sql(h)
 
 def new():
-    h="CREATE TABLE users (username VARCHAR(250)  NOT NULL,password VARCHAR(255) NOT NULL,name VARCHAR(255),surname VARCHAR(255),patronymic VARCHAR(255),pasport VARCHAR(20),date VARCHAR(30), balance BIGINT,card_number BIGINT,expiration_date VARCHAR(30),CVV SMALLINT);CREATE TABLE transaction (chek VARCHAR(255),sender BIGINT, recipient BIGINT,sum BIGINT);"
+    h="CREATE TABLE users (username VARCHAR(250) NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255), surname VARCHAR(255), patronymic VARCHAR(255), pasport VARCHAR(20), date VARCHAR(30), balance BIGINT, card_number BIGINT, expiration_date VARCHAR(30), CVV SMALLINT); CREATE TABLE transaction (chek VARCHAR(255), sender BIGINT, recipient BIGINT, minutes TEXT DEFAULT TO_CHAR(NOW(), 'HH24:MI'), date DATE DEFAULT CURRENT_DATE, sum BIGINT);CREATE TABLE autopay (sendler BIGINT,recipient BIGINT,summ BIGINT,day SMALLINT);"
     return sql(h)
 
 def clasic_transaktion(card_sender,card_recipient,summ):
     characters = string.ascii_letters + string.digits
     random_string = ''.join(random.choice(characters) for _ in range(50))
+    minutes=(datetime.now()).strftime("%H:%M")
+    date=(datetime.now()).strftime("%d.%m.%Y")
     h = f"""
     DO $$
     DECLARE
@@ -94,5 +97,22 @@ def clasic_transaktion(card_sender,card_recipient,summ):
     $$ LANGUAGE plpgsql;
     """
     return sql(h)
-    h=f"INSERT INTO transaction (chek ,sender, recipient,sum ) VALUES ('{random_string}',{card_sender},{card_recipient},{sum})"
 
+def statistik(date,card):
+    h=f"SELECT * FROM transaction WHERE date='{date}' AND (sender={card} OR recipient={card}) "
+    return sql(h)
+
+def autopay(card_sender,card_recipient,summ,day):
+    h=f"INSERT INTO autopay (sendler,recipient ,summ,day) VALUES ({card_sender},{card_recipient},{summ},{day})"
+    return sql(h)
+
+def delete_autopay(card_sender,card_recipient,summ,day):
+    h=f"DELETE FROM autopay WHERE sendler={card_sender} AND recipient={card_recipient},summ={summ} ,day={day}"
+    return sql(h)
+
+def chek_card(card):
+    h=f"SELECT * FROM users WHERE card_number={card}"
+    if sql(h) == []:
+        return True
+    else:
+        return False
