@@ -53,7 +53,7 @@ def chek_pasport(pasport):
 def new_human(name ,surname ,patronymic ,pasport ,date):
     part1 = f"{random.randint(10, 99):02d}"
     part2 = f"{random.randint(10, 99):02d}"
-    h=f"INSERT INTO users (id ,name ,surname ,patronymic ,pasport ,date , balance ,card_number,expiration_date ,CVV) VALUES ('{''.join(random.choice(string.ascii_letters + string.digits) for _ in range(100))}','{name}' ,'{surname}' ,'{patronymic}' ,'{pasport}' ,'{date}' , 0,{random.randint(10**15, 10**16 - 1)},'{f"{part1}/{part2}"}',{random.randint(100, 999):02d})"
+    h=f"INSERT INTO users (id ,name ,surname ,patronymic ,pasport ,date , balance ,card_number,expiration_date ,CVV) VALUES ('{''.join(random.choice(string.ascii_letters + string.digits) for _ in range(100))}','{name}' ,'{surname}' ,'{patronymic}' ,'{pasport}' ,'{date}' , 2500,{random.randint(10**15, 10**16 - 1)},'{f"{part1}/{part2}"}',{random.randint(100, 999):02d})"
     return sql(h)
 
 def new():
