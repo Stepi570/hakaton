@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банковское приложение - Платежи</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="free-icon-credit-card-10445706.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка с балансом -->
+        <header class="app-header">
+            <div class="account-summary">
+                <div class="account-info">
+                    <span class="account-name">Основной счет</span>
+                    <span class="account-number">•••• •••• •••• 2358</span>
+                </div>
+                <div class="account-balance">25 648,50 ₽</div>
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Форма перевода -->
+            <section class="payment-form">
+                <h2>Новый перевод</h2>
+                <form id="transferForm">
+                    <div class="form-group">
+                        <label for="cardNumber">Номер карты получателя</label>
+                        <input type="text" id="cardNumber" name="cardNumber"
+                               placeholder="0000 0000 0000 0000"
+                               pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Сумма перевода</label>
+                        <div class="amount-input">
+                            <input type="number" id="amount" name="amount"
+                                   placeholder="0" min="1" required>
+                            <span class="currency">₽</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Перевести</button>
+                </form>
+            </section>
+
+            <!-- Быстрые платежи -->
+            <section class="quick-payments">
+                <h3>Частые платежи</h3>
+                <div class="quick-payments-grid">
+                    <div class="payment-option">
+                        <div class="payment-icon">📱</div>
+                        <span>Мобильная связь</span>
+                    </div>
+                    <div class="payment-option">
+                        <div class="payment-icon">💡</div>
+                        <span>Электричество</span>
+                    </div>
+                    <div class="payment-option">
+                        <div class="payment-icon">🚰</div>
+                        <span>Вода</span>
+                    </div>
+                    <div class="payment-option">
+                        <div class="payment-icon">🛒</div>
+                        <span>Магазины</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Нижнее меню -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Главная</span>
+            </a>
+            <a href="payments.html" class="nav-item active">
+                <span class="nav-icon">💸</span>
+                <span class="nav-text">Платежи</span>
+            </a>
+            <a href="history.html" class="nav-item">
+                <span class="nav-icon">🕒</span>
+                <span class="nav-text">История</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <span class="nav-icon">🛠️</span>
+                <span class="nav-text">Сервисы</span>
+            </a>
+            <a href="chat.html" class="nav-item">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">Чат</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

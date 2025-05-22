@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банковское приложение - Вход</title>
+    <script src="eel.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    <link rel="icon" type="image/png" href="free-icon-credit-card-10445706.png">
+</head>
+<body>
+    <div class="registration-container">
+        <h1>{{ info }}</h1>
+        <form id="loginForm" method='post'>
+            <div class="form-group">
+                <label for="passportNumber">Номер паспорта:</label>
+                <input type="text" id="passportNumber" name='pasport_input' 
+                       placeholder="XXXXXXXXXX" required>
+                <small>Формат: 1234 567890</small>
+            </div>
+            
+            <div class="form-group">
+                
+                <label for="password">Номер карты:</label>
+                <input type="password" id="password" name='card_input' required>
+            </div>
+
+            <button type="submit" class="submit-btn">Войти</button>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="#" style="color: #2989d8; text-decoration: none;">Забыли пароль?</a>
+            </div>
+            
+            <div style="text-align: center; margin-top: 25px;">
+                <span style="color: #666;">Нет аккаунта? </span>
+                <a href="/registr" style="color: #2989d8; text-decoration: none;">Зарегистрироваться</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

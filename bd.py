@@ -33,32 +33,31 @@ def sql(text):
             connection.close()
             print("Соединение закрыто")
 
-def chek_human(user,password):
-    h=f"SELECT * FROM users WHERE username='{user}' AND password='{password}'"
+def all_human(id):
+    h=f"SELECT * FROM users * WHERE id='{id}'"
+    return sql(h)
+
+
+def chek_human(pasport,card):
+    h=f"SELECT * FROM users WHERE pasport='{pasport}' AND card_number='{card}'"
     return sql(h)
 
 def chek_pasport(pasport):
     h=f"SELECT * FROM users WHERE pasport='{pasport}'"
-    if sql(h) == []:
+    d=sql(h)
+    if d == []:
         return False
     else:
-        return True
+        return d
 
-def chek_name(name):
-    h=f"SELECT * FROM users WHERE username='{name}'"
-    if sql(h) == []:
-        return True
-    else:
-        return False
-
-def new_human(username ,password ,name ,surname ,patronymic ,pasport ,date):
+def new_human(name ,surname ,patronymic ,pasport ,date):
     part1 = f"{random.randint(10, 99):02d}"
     part2 = f"{random.randint(10, 99):02d}"
-    h=f"INSERT INTO users (username ,password ,name ,surname ,patronymic ,pasport ,date , balance ,card_number,expiration_date ,CVV) VALUES ('{username}' ,'{password}' ,'{name}' ,'{surname}' ,'{patronymic}' ,'{pasport}' ,'{date}' , 0,{random.randint(10**15, 10**16 - 1)},'{f"{part1}/{part2}"}',{random.randint(100, 999):02d})"
+    h=f"INSERT INTO users (id ,name ,surname ,patronymic ,pasport ,date , balance ,card_number,expiration_date ,CVV) VALUES ('{''.join(random.choice(string.ascii_letters + string.digits) for _ in range(100))}','{name}' ,'{surname}' ,'{patronymic}' ,'{pasport}' ,'{date}' , 0,{random.randint(10**15, 10**16 - 1)},'{f"{part1}/{part2}"}',{random.randint(100, 999):02d})"
     return sql(h)
 
 def new():
-    h="CREATE TABLE users (username VARCHAR(250) NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255), surname VARCHAR(255), patronymic VARCHAR(255), pasport VARCHAR(20), date VARCHAR(30), balance BIGINT, card_number BIGINT, expiration_date VARCHAR(30), CVV SMALLINT); CREATE TABLE transaction (chek VARCHAR(255), sender BIGINT, recipient BIGINT, minutes TEXT DEFAULT TO_CHAR(NOW(), 'HH24:MI'), date DATE DEFAULT CURRENT_DATE, sum BIGINT);CREATE TABLE autopay (sendler BIGINT,recipient BIGINT,summ BIGINT,day SMALLINT);"
+    h="CREATE TABLE users (id VARCHAR(250), name VARCHAR(255), surname VARCHAR(255), patronymic VARCHAR(255), pasport VARCHAR(20), date VARCHAR(30), balance BIGINT, card_number BIGINT, expiration_date VARCHAR(30), CVV SMALLINT); CREATE TABLE transaction (chek VARCHAR(255), sender BIGINT, recipient BIGINT, minutes TEXT DEFAULT TO_CHAR(NOW(), 'HH24:MI'), date DATE DEFAULT CURRENT_DATE, sum BIGINT);CREATE TABLE autopay (sendler BIGINT,recipient BIGINT,summ BIGINT,day SMALLINT);"
     return sql(h)
 
 def clasic_transaktion(card_sender,card_recipient,summ):
@@ -116,3 +115,4 @@ def chek_card(card):
         return True
     else:
         return False
+    

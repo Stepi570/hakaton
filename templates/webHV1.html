@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Банк - Главная</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    <link rel="icon" type="image/png" href="free-icon-credit-card-10445706.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка с ФИО -->
+        <header class="header">
+            <h1>{{ FIO }}</h1>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Блок счета -->
+            <section class="account-card">
+                <div class="account-info">
+                    <span class="account-name">Основной счет в рублях</span>
+                    <span class="account-number">{{ card }}</span>
+                    <span class="account-balance">{{ money }} ₽</span>
+                </div>
+                <div class="card-details">
+                    <span>Карта: ••• {{ card_last }}</span>
+                    <span>Действует до: {{ card_date }}</span>
+                </div>
+            </section>
+
+            <!-- Кнопки действий -->
+            <div class="action-buttons">
+                <button class="btn primary">Пополнить</button>
+                <button class="btn secondary">Перевести</button>
+            </div>
+
+            <!-- Быстрые действия -->
+            <section class="quick-actions">
+                <div class="action-item">
+                    <div class="action-icon">QR</div>
+                    <span>Оплата по QR</span>
+                </div>
+                <div class="action-item">
+                    <div class="action-icon">📱</div>
+                    <span>По номеру</span>
+                </div>
+                <div class="action-item">
+                    <div class="action-icon">💳</div>
+                    <span>Мои карты</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- Нижнее меню (ТОЛЬКО ОДНО МЕНЮ!) -->
+        <nav class="bottom-nav">
+            <a href="webHV1.html" class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Главная</span>
+            </a>
+            <a href="home/{{id}}/pays" class="nav-item">
+                <span class="nav-icon">💸</span>
+                <span class="nav-text">Платежи</span>
+            </a>
+            <a href="history.html" class="nav-item">
+                <span class="nav-icon">🕒</span>
+                <span class="nav-text">История</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <span class="nav-icon">🛠️</span>
+                <span class="nav-text">Сервисы</span>
+            </a>
+            <a href="chat.html" class="nav-item">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">Чат</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
