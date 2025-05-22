@@ -5,7 +5,7 @@ import threading
 import datetime
 
 app=Flask(__name__)
-
+new()
 @app.route('/rigister', methods=['POST', 'GET'])
 def rigister():
     return render_template('home.html') 
