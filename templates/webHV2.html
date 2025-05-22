@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Банковское приложение - Платежи</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
     <link rel="icon" type="image/png" href="free-icon-credit-card-10445706.png">
 </head>
 <body>
@@ -14,9 +14,9 @@
             <div class="account-summary">
                 <div class="account-info">
                     <span class="account-name">Основной счет</span>
-                    <span class="account-number">•••• •••• •••• 2358</span>
+                    <span class="account-number">•••• •••• •••• {{ card_last }}</span>
                 </div>
-                <div class="account-balance">25 648,50 ₽</div>
+                <div class="account-balance">{{ money }} ₽</div>
             </div>
         </header>
 
@@ -24,13 +24,12 @@
         <main class="main-content">
             <!-- Форма перевода -->
             <section class="payment-form">
-                <h2>Новый перевод</h2>
-                <form id="transferForm">
+                <h2>{{ info }}</h2>
+                <form id="transferForm" method="POST">
                     <div class="form-group">
                         <label for="cardNumber">Номер карты получателя</label>
                         <input type="text" id="cardNumber" name="cardNumber"
                                placeholder="0000 0000 0000 0000"
-                               pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
                                required>
                     </div>
 
@@ -42,8 +41,7 @@
                             <span class="currency">₽</span>
                         </div>
                     </div>
-
-                    <button type="submit" class="submit-btn">Перевести</button>
+                    <button  class="submit-btn">Перевести</button>
                 </form>
             </section>
 
@@ -73,15 +71,15 @@
 
         <!-- Нижнее меню -->
         <nav class="bottom-nav">
-            <a href="index.html" class="nav-item">
+            <a href="/home/{{ id }}" class="nav-item active">
                 <span class="nav-icon">🏠</span>
                 <span class="nav-text">Главная</span>
             </a>
-            <a href="payments.html" class="nav-item active">
+            <a href="/home/{{id}}/pays" class="nav-item">
                 <span class="nav-icon">💸</span>
                 <span class="nav-text">Платежи</span>
             </a>
-            <a href="history.html" class="nav-item">
+            <a href="/home/{{id}}/history" class="nav-item">
                 <span class="nav-icon">🕒</span>
                 <span class="nav-text">История</span>
             </a>

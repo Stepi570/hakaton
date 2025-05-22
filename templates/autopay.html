@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Банк - Автоплатежи</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    <link rel="icon" type="image/png" href="free-icon-credit-card-10445706.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка -->
+        <header class="header">
+            <h1>Автоплатежи</h1>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Форма добавления автоплатежа -->
+            <section class="payment-form">
+                <h2>Добавить автоплатеж</h2>
+                <form id="autoPaymentForm" method="POST">
+                    <div class="form-group">
+                        <label for="cardNumber">Номер карты получателя</label>
+                        <input type="text" id="cardNumber" name="cardNumber" 
+                               placeholder="XXXX XXXX XXXX XXXX" required>
+                    </div>
+                    
+                    <div class="form-group amount-input">
+                        <label for="amount">Сумма</label>
+                        <input type="number" id="amount" name="amount" 
+                               placeholder="0.00" required>
+
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paymentName">Название платежа</label>
+                        <input type="text" id="paymentName" name="paymentName" 
+                               placeholder="Например: Интернет" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paymentDate">День списания</label>
+                        <input type="number" id="paymentDate" name="paymentDate" min="1" max="30" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Сохранить автоплатеж</button>
+                </form>
+            </section>
+
+            <!-- Список существующих автоплатежей -->
+            <section class="quick-payments">
+                <h3>Мои автоплатежи</h3>
+                
+                <div class="auto-payments-list">
+                    {% for i in a %}
+                    <div class="auto-payment-item">
+                        <div class="payment-info">
+                            <div class="payment-name">{{ i[3] }}</div>
+                            <div class="payment-details">
+                                <span>Карта: {{ i[2] }}</span>
+                                <span>Сумма: {{ i[3] }} ₽</span>
+                                <span>Дата: {{ i[5] }} число</span>
+                            </div>
+                        </div>
+                        <button type="button" class="delete-btn" onclick="window.location.href='/home/{{ id }}/delete/{{ i[1] }}'">✕</button></div>
+                    {% endfor %}
+                    
+                </div>
+            </section>
+        </main>
+
+        <!-- Нижнее меню -->
+        <nav class="bottom-nav">
+            <a href="/home/{{ id }}" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Главная</span>
+            </a>
+            <a href="/home/{{id}}/pays" class="nav-item">
+                <span class="nav-icon">💸</span>
+                <span class="nav-text">Платежи</span>
+            </a>
+            <a href="/home/{{id}}/autopayments" class="nav-item active">
+                <span class="nav-icon">🔄</span>
+                <span class="nav-text">Автоплатежи</span>
+            </a>
+            <a href="/home/{{id}}/history" class="nav-item">
+                <span class="nav-icon">🕒</span>
+                <span class="nav-text">История</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Профиль</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

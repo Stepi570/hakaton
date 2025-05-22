@@ -57,7 +57,7 @@ def new_human(name ,surname ,patronymic ,pasport ,date):
     return sql(h)
 
 def new():
-    h="CREATE TABLE users (id VARCHAR(250), name VARCHAR(255), surname VARCHAR(255), patronymic VARCHAR(255), pasport VARCHAR(20), date VARCHAR(30), balance BIGINT, card_number BIGINT, expiration_date VARCHAR(30), CVV SMALLINT); CREATE TABLE transaction (chek VARCHAR(255), sender BIGINT, recipient BIGINT, minutes TEXT DEFAULT TO_CHAR(NOW(), 'HH24:MI'), date DATE DEFAULT CURRENT_DATE, sum BIGINT);CREATE TABLE autopay (sendler BIGINT,recipient BIGINT,summ BIGINT,day SMALLINT);"
+    h="CREATE TABLE users (id VARCHAR(250), name VARCHAR(255), surname VARCHAR(255), patronymic VARCHAR(255), pasport VARCHAR(20), date VARCHAR(30), balance BIGINT, card_number BIGINT, expiration_date VARCHAR(30), CVV SMALLINT); CREATE TABLE transaction (chek VARCHAR(255), sender BIGINT, recipient BIGINT, minutes TEXT DEFAULT TO_CHAR(NOW(), 'HH24:MI'), date DATE DEFAULT CURRENT_DATE, sum BIGINT);CREATE TABLE autopay (id VARCHAR(300),id_platesh VARCHAR(300),recipient BIGINT,summ BIGINT,information VARCHAR(300),day SMALLINT);"
     return sql(h)
 
 def clasic_transaktion(card_sender,card_recipient,summ):
@@ -71,10 +71,16 @@ def clasic_transaktion(card_sender,card_recipient,summ):
         rows_affected1 INTEGER;
         rows_affected2 INTEGER;
     BEGIN     
-        -- Проверяем достаточность средств
-        PERFORM 1 FROM users WHERE card_number = {card_sender} AND balance >= 500;
+        -- Проверяем существование карты получателя
+        PERFORM 1 FROM users WHERE card_number = {card_recipient};
         IF NOT FOUND THEN
-            RAISE EXCEPTION 'Недостаточно средств на карте';
+            RAISE EXCEPTION 'Карта получателя не найдена';
+        END IF;
+        
+        -- Проверяем достаточность средств у отправителя
+        PERFORM 1 FROM users WHERE card_number = {card_sender} AND balance >= {summ};
+        IF NOT FOUND THEN
+            RAISE EXCEPTION 'Недостаточно средств на карте отправителя';
         END IF;
         
         -- Выполняем транзакцию
@@ -87,11 +93,15 @@ def clasic_transaktion(card_sender,card_recipient,summ):
         IF rows_affected1 = 0 OR rows_affected2 = 0 THEN
             RAISE EXCEPTION 'Ошибка при обновлении баланса';
         END IF;
-        INSERT INTO transaction (chek ,sender, recipient,sum ) VALUES ('{random_string}',{card_sender},{card_recipient},{summ});
+        
+        -- Добавляем запись о транзакции
+        INSERT INTO transaction (chek, sender, recipient, sum) 
+        VALUES ('{random_string}', {card_sender}, {card_recipient}, {summ});
+        
         RAISE NOTICE 'Транзакция успешно выполнена';
     EXCEPTION
     WHEN OTHERS THEN
-        RAISE EXCEPTION '%', SQLERRM;
+        RAISE EXCEPTION 'Ошибка при выполнении транзакции: %', SQLERRM;
     END;
     $$ LANGUAGE plpgsql;
     """
@@ -101,8 +111,8 @@ def statistik(date,card):
     h=f"SELECT * FROM transaction WHERE date='{date}' AND (sender={card} OR recipient={card}) "
     return sql(h)
 
-def autopay(card_sender,card_recipient,summ,day):
-    h=f"INSERT INTO autopay (sendler,recipient ,summ,day) VALUES ({card_sender},{card_recipient},{summ},{day})"
+def autopay(id,recipient,summ,information,day):
+    h=f"INSERT INTO autopay (id ,id_platesh ,recipient ,summ ,information,day) VALUES ('{id}','{''.join(random.choice(string.ascii_letters + string.digits) for _ in range(100))}',{recipient} ,{summ} ,'{information}',{day})"
     return sql(h)
 
 def delete_autopay(card_sender,card_recipient,summ,day):
@@ -111,8 +121,27 @@ def delete_autopay(card_sender,card_recipient,summ,day):
 
 def chek_card(card):
     h=f"SELECT * FROM users WHERE card_number={card}"
-    if sql(h) == []:
+    if sql(h)==[]:
         return True
     else:
         return False
     
+def chek_auto(id):
+    h=f"SELECT * FROM autopay WHERE id='{id}'"
+    return sql(h)
+
+def delete_autopay(id_piat):
+    h=f"DELETE FROM autopay WHERE id_platesh='{id_piat}'"
+    return sql(h)
+
+def all_autopay(day):
+    h=f"SELECT * FROM autopay WHERE day={day}"
+    return sql(h)
+
+def kard(id):
+    h=f"SELECT card_number FROM users WHERE id='{id}'"
+    return sql(h)
+
+def historyy(card):
+    h=f"SELECT * FROM transaction WHERE sender = {card} OR recipient = {card} ORDER BY date DESC;"
+    return sql(h)

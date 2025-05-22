@@ -28,12 +28,14 @@
                     <span>Действует до: {{ card_date }}</span>
                 </div>
             </section>
-
-            <!-- Кнопки действий -->
-            <div class="action-buttons">
-                <button class="btn primary">Пополнить</button>
-                <button class="btn secondary">Перевести</button>
-            </div>
+           
+                <!-- Кнопки действий -->
+                <div class="action-buttons">
+                    <button type="button" class="btn primary" onclick="window.location.href='/home/{{ id }}/autopayment'">Автоплатеж</button>
+                    <form method='GET' action="/home/{{ id }}/pays">
+                    <button type="submit" class="btn secondary">Перевести</button></form>
+                </div>
+            
 
             <!-- Быстрые действия -->
             <section class="quick-actions">
@@ -54,15 +56,15 @@
 
         <!-- Нижнее меню (ТОЛЬКО ОДНО МЕНЮ!) -->
         <nav class="bottom-nav">
-            <a href="webHV1.html" class="nav-item active">
+            <a href="/home/{{ id }}" class="nav-item active">
                 <span class="nav-icon">🏠</span>
                 <span class="nav-text">Главная</span>
             </a>
-            <a href="home/{{id}}/pays" class="nav-item">
+            <a href="/home/{{id}}/pays" class="nav-item">
                 <span class="nav-icon">💸</span>
                 <span class="nav-text">Платежи</span>
             </a>
-            <a href="history.html" class="nav-item">
+            <a href="/home/{{id}}/history" class="nav-item">
                 <span class="nav-icon">🕒</span>
                 <span class="nav-text">История</span>
             </a>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Банк - История платежей</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+    <link rel="icon" type="image/png" href="free-icon-credit-card-10445706.png">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка с ФИО -->
+        <header class="header">
+            <h1>История платежей</h1>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Фильтры -->
+            <section class="filters-section">
+                <div class="action-buttons">
+                    <button type="button" class="btn secondary">Все</button>
+                    <button type="button" class="btn secondary">Исходящие</button>
+                    <button type="button" class="btn secondary">Входящие</button>
+                </div>
+            </section>
+
+            <!-- Список транзакций -->
+            <section class="transactions-list">
+               {% for d in transactions %}
+            
+                <!-- Вторая примерная транзакция -->
+                <div class="transaction-card">
+                    <div class="transaction-icon">
+                        <span>💸</span>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-header">
+                            <span class="transaction-title">Перевод между картами</span>
+                            <span class="transaction-amount incoming">{{ d[5] }} ₽</span>
+                        </div>
+                        <div class="transaction-meta">
+                            <div class="transaction-accounts">
+                                <span class="account-from">С карты: {{ d[1] }}</span>
+                                <span class="account-to">На карту: {{ d[2] }}</span>
+                            </div>
+                            <div class="transaction-info">
+                                <span class="transaction-date">{{ d[4] }} {{ d[3] }}</span>
+                                <span class="transaction-status completed">Выполнено</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </section>
+        </main>
+
+        <!-- Нижнее меню -->
+        <nav class="bottom-nav">
+            <a href="/home/{{ id }}" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Главная</span>
+            </a>
+            <a href="/home/{{id}}/pays" class="nav-item">
+                <span class="nav-icon">💸</span>
+                <span class="nav-text">Платежи</span>
+            </a>
+            <a href="/home/{{id}}/history" class="nav-item">
+                <span class="nav-icon">🕒</span>
+                <span class="nav-text">История</span>
+            </a>
+            <a href="/services/{{id}}" class="nav-item">
+                <span class="nav-icon">🛠️</span>
+                <span class="nav-text">Сервисы</span>
+            </a>
+            <a href="/chat/{{id}}" class="nav-item">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">Чат</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
